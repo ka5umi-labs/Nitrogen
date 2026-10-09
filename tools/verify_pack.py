@@ -261,6 +261,8 @@ def check_downloads(entries):
     """并发检查所有下载地址可达。"""
     urls = []
     for rel in entries:
+        if not rel.endswith(".pw.toml"):
+            continue
         d = parse_pw_toml(os.path.join(ROOT, rel))
         u = d.get("download", {}).get("url")
         if u:
