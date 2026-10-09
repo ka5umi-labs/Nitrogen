@@ -1,0 +1,41 @@
+# .packwizignore —— 让 packwiz 不要索引这些文件
+#
+# 语法与 .gitignore 相同。packwiz 的 refresh 会扫描仓库所有文件并写进
+# index.toml，而 index.toml 里任何非 metafile 条目都会被 mr export
+# 打包进 overrides/ 分发给玩家。
+#
+# 因此开发用的文件必须在这里排除，否则玩家游戏目录里会多出
+# AGENTS.md、docs/、tools/ 甚至 __pycache__。
+
+# 文档
+AGENTS.md
+README.md
+CHANGELOG.md
+LICENSE
+docs/**
+
+# 工具与 CI
+tools/**
+.github/**
+bundled-mods.toml
+
+# Python 缓存
+__pycache__/
+**/__pycache__/
+*.pyc
+
+# packwiz 自身
+packwiz
+packwiz.exe
+.packwizignore
+
+# 导出产物
+*.mrpack
+*.zip
+
+# 编辑器与系统文件
+.vscode/**
+.idea/**
+*.swp
+.DS_Store
+Thumbs.db

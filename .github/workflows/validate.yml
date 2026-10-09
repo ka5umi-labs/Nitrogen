@@ -1,7 +1,7 @@
 name: validate
 
 # 每次推送与 PR 都运行静态校验。
-# 特别地，任何改动 mods/ 的 PR 都必须通过铁律扫描。
+# 特别地，任何改动 mods/ 的 PR 都必须通过铁律扫描与打包模组检查。
 
 on:
   push:
@@ -73,7 +73,21 @@ jobs:
       - name: 复核 side 与上游 environment 是否一致
         run: python3 tools/check_side.py
 
-  # ---------- 4. 更新追踪（仅提示，不阻塞） ----------
+  # ---------- 4. 打包分发模组检查 ----------
+  bundled-check:
+    name: 打包模组检查
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 检查登记、布局与许可证
+        run: python3 tools/check_bundled.py
+
+  # ---------- 5. 更新追踪（仅提示，不阻塞） ----------
   track-updates:
     name: 上游更新追踪
     runs-on: ubuntu-latest

@@ -41,10 +41,13 @@ python3 tools/track_updates.py --mc <目标版本> --only-blocked
 # 干跑
 ./packwiz.exe update --all --dry-run
 
-# 实际升级
+# 实际升级（只影响走下载链接的模组）
 ./packwiz.exe update --all
 ./packwiz.exe refresh
 ```
+
+打包分发的模组（`mods/` 下的 jar）**不会被 `update --all` 更新**，
+需手动处理 —— 见 [bundled-mods.md](bundled-mods.md)。
 
 ### 4. 全量校验（缺一不可）
 
@@ -57,6 +60,9 @@ python3 tools/scan_channels.py
 
 # ③ side 复核 —— 必须"不一致 0"
 python3 tools/check_side.py
+
+# ④ 打包模组登记与布局检查
+python3 tools/check_bundled.py
 ```
 
 任何一项报错都**不要继续**。
@@ -95,23 +101,26 @@ git push origin main --tags
 
 产物是 `Nitrogen-<版本号>.mrpack`（已在 `.gitignore` 中）。
 
-### 9. 处理 url 模式的模组
+导出时注意观察 packwiz 的输出：
 
-若本次有"无上游"模组（见 `docs/manual-mods.md`），必须先把对应 jar
-上传到本仓库的 GitHub Release：
+- `added to manifest` = 走下载链接
+- `added to zip` = 被打包进 `overrides/`（非 Modrinth 来源）
 
-```
-Release tag: v<版本号>
-上传文件:   与 .pw.toml 中 filename 字段完全同名的 jar
-```
+若某个**应该走链接**的 Modrinth 模组显示 `added to zip`，说明它的
+`url` 有问题，需检查元数据。反之，打包模组应当显示 `added to zip`。
 
-上传后验证：
+导出后确认包里没有混入开发文件：
 
 ```bash
-python3 tools/verify_pack.py --online
+python3 -c "
+import zipfile,sys
+z=zipfile.ZipFile(sys.argv[1])
+bad=[n for n in z.namelist() if n.startswith(('overrides/docs','overrides/tools','overrides/AGENTS','overrides/.github')) or '__pycache__' in n]
+print('混入的开发文件:', bad or '无')
+" Nitrogen-<版本号>.mrpack
 ```
 
-### 10. 发布到 Modrinth
+### 9. 发布到 Modrinth
 
 在 https://modrinth.com/modpack/nitrogen7/versions 新建版本：
 
@@ -119,7 +128,9 @@ python3 tools/verify_pack.py --online
 - 填写版本号、MC 版本、加载器（Fabric）
 - 更新日志粘贴第 6 步的内容
 
-### 11. 作者测试（发布前必做）
+打包的 jar 会随 mrpack 一起上传，无需额外步骤。
+
+### 10. 作者测试（发布前必做）
 
 **AI 不执行这一步。** 至少验证：
 

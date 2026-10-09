@@ -1,8 +1,0 @@
-name = "MasaGadget"
-filename = "MasaGadget-mc26.3-fabric-4.0.403-development.jar"
-side = "client"
-
-[download]
-url = "https://github.com/ka5umi-labs/Nitrogen/releases/download/v7.3/MasaGadget-mc26.3-fabric-4.0.403-development.jar"
-hash-format = "sha512"
-hash = "3adc3127841d41a34beffd0e419bf63b9485173e9032e63d14b813e63991a7f34f74e028e910e736e106c36c50e0a6aedb2007eb2bbbe6bdd2a64957787c7b5c"

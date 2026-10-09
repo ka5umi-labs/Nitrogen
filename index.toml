@@ -6,6 +6,18 @@ hash = "d948339327bc53e47c9133f0ec00db69d37a804d1bd35de20421344cdc6df94b"
 metafile = true
 
 [[files]]
+file = "mods/MasaGadget-mc26.3-fabric-4.0.403-development.jar"
+hash = "bf153241220fca07f0222cc612ef24a62da67a7c8f08b0d41856dd7e5799a439"
+
+[[files]]
+file = "mods/ModernUI-Fabric-26.3-3.14.7-universal.jar"
+hash = "cabe541ca1df086734869cefadb05d2ab2f3b391df6954249ea5cedecdabf9f9"
+
+[[files]]
+file = "mods/Oh-My-Minecraft-Client-v0.7.1-mc26.3-fabric.jar"
+hash = "dcce652407ea42c31dd11bb0a4582ef2be8b8e3bcccecc312c2d662aaaee8113"
+
+[[files]]
 file = "mods/ambientsounds.pw.toml"
 hash = "b3a3d61a442a41a1b4cabe37ca0c9807cce65d90fbc0432d8e33b0243025f23c"
 metafile = true
@@ -106,9 +118,8 @@ hash = "2b9727522c90a979eb9671ad7c5421443d91391b0697d1772146e6bfa19cb3c1"
 metafile = true
 
 [[files]]
-file = "mods/connectivity.pw.toml"
-hash = "45fa6ca79e4e30cc30e7b018af742edb48c6a5dd6ac0d679539e0c7d8747dcd7"
-metafile = true
+file = "mods/connectivity-fabric-26.3-7.7.jar"
+hash = "c1f6db13bdcd809e6413d5ddcada44543d05fb31e69a33c7da1fec2cd57e2b94"
 
 [[files]]
 file = "mods/continuity.pw.toml"
@@ -126,9 +137,8 @@ hash = "f9bd6e85174067ba0c09a571e1851a39f3eaa695624f5e3cf090edcaf141c35c"
 metafile = true
 
 [[files]]
-file = "mods/cupboard.pw.toml"
-hash = "b9bd277c25e9cab24d017d410a4d109339b3f268583c92fe44988c350fe93141"
-metafile = true
+file = "mods/cupboard-fabric-26.3-4.2.jar"
+hash = "e40192b795580401e7198a55d05dcb92b45fafc65a8cb44b1dfc96846c20a9df"
 
 [[files]]
 file = "mods/debugify.pw.toml"
@@ -151,9 +161,8 @@ hash = "775dd2805e80797b88810a8154fb1b43a3b74b946e808f42606b91223ece17b3"
 metafile = true
 
 [[files]]
-file = "mods/eating-animation-fork.pw.toml"
-hash = "d999fbc6514b6bcdfae5b806816e8798d895da45f3f0d5e6bdfa08a758bc025a"
-metafile = true
+file = "mods/eating-animation-fork-26.3+5.1.0.jar"
+hash = "0d94bf1742e9eb5d6e2b4b4a1555f33a19ee5c91072eb9bf641d916220f479cf"
 
 [[files]]
 file = "mods/eclipses-tweakeroo-additions.pw.toml"
@@ -306,11 +315,6 @@ hash = "aa19aaf146fb03f895583147e1906b950c9acc2c31a16110d3764401a65a79e1"
 metafile = true
 
 [[files]]
-file = "mods/masa-gadget.pw.toml"
-hash = "5ad1061437acdef0f7043d711dcff6dc0cea850d8eb384e29d3c7b46c349acb1"
-metafile = true
-
-[[files]]
 file = "mods/minihud.pw.toml"
 hash = "3cc0adb13783202ba6b53fdfc3a0dfed4b9d0e95c9c186a4796b3530c2d83c13"
 metafile = true
@@ -318,11 +322,6 @@ metafile = true
 [[files]]
 file = "mods/modernfix-mvus.pw.toml"
 hash = "3b3b9e886735bd8d8809954b7da8d1cca5b8186086379f129f0e4183470a7b2b"
-metafile = true
-
-[[files]]
-file = "mods/modernui-unofficial-port.pw.toml"
-hash = "07f39f1b914aec6c4b84d8250eaf92cd4eb9863df6e72c6e0ad5b43ce6aa928d"
 metafile = true
 
 [[files]]
@@ -358,11 +357,6 @@ metafile = true
 [[files]]
 file = "mods/nuit.pw.toml"
 hash = "105ad6c19f7402b7a7f057d90c55c136fcfb6936237d2f01043cd80e8eb40d3c"
-metafile = true
-
-[[files]]
-file = "mods/oh-my-minecraft-client.pw.toml"
-hash = "21be3812eef9323338511580e99e168cd90a4902e17acefdb4fa4639a253a103"
 metafile = true
 
 [[files]]

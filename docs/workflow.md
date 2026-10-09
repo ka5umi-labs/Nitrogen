@@ -34,21 +34,52 @@ python3 tools/scan_channels.py --explain mods/<slug>.pw.toml
 - 出现 `configuration 阶段` 标记 → 需作者在游戏内验证原版客户端能否加入
 - 只有 `[INFO]` → 可以加入
 
-### 2. 加入并提交
+### 2. 优先用 Modrinth 来源
+
+Modrinth 来源的模组走下载链接，玩家端按需下载、不进我们的仓库体积。
+**凡是 Modrinth 上有的，一律用 `mr add`。**
 
 ```bash
-./packwiz.exe mr add <slug>        # Modrinth 来源
-./packwiz.exe cf add <slug>        # CurseForge 来源
+./packwiz.exe mr add <slug>        # Modrinth 来源（首选）
+```
+
+### 3. 非 Modrinth 来源：只能打包
+
+CurseForge 或 GitHub fork 的模组无法用下载链接（Modrinth 只接受
+cdn.modrinth.com），必须把 jar 打包。详见 [bundled-mods.md](bundled-mods.md)。
+
+```bash
+# CurseForge 模组可以先用 cf add 拿到元数据（含正确哈希），再转打包
+./packwiz.exe cf add <slug>
+./packwiz.exe refresh
+
+# 下载 jar 放到 mods/ 下，然后删掉 .pw.toml
+cp <下载的 jar> mods/
+rm mods/<slug>.pw.toml
+
+# 在 bundled-mods.toml 登记来源
+# 重新生成索引并校验
+./packwiz.exe refresh
+python3 tools/check_bundled.py
+```
+
+**jar 放 `mods/` 下，不要放 `overrides/`** —— 放错会导致
+`overrides/overrides/`，玩家装了不生效。
+
+### 4. 加入并提交
+
+```bash
 ./packwiz.exe refresh
 
 python3 tools/verify_pack.py
+python3 tools/check_bundled.py
 python3 tools/check_side.py --explain mods/<slug>.pw.toml
 
 git add -A
 git commit -m "feat(mods): 新增 <模组名>"
 ```
 
-### 3. 依赖检查
+### 5. 依赖检查
 
 很多模组需要前置（Fabric API、Cloth Config、YACL 等）。packwiz 不会自动装前置：
 
@@ -141,11 +172,14 @@ python3 tools/scan_channels.py
 # 3. side 复核（必须不一致 0）
 python3 tools/check_side.py
 
-# 4. 看还有哪些模组没跟上
+# 4. 打包分发的模组（登记齐全、无 overrides 误放、许可证提示）
+python3 tools/check_bundled.py
+
+# 5. 看还有哪些模组没跟上
 python3 tools/track_updates.py --only-blocked
 ```
 
-四项全过之后才进入 [发版流程](release.md)。
+五项全过之后才进入 [发版流程](release.md)。
 
 ## 七、AI 协作方式
 

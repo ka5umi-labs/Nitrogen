@@ -73,7 +73,9 @@ python3 tools/scan_channels.py
 - 读写 `mods/`、`resourcepacks/`、`shaderpacks/` 下的 `.pw.toml`
 - 运行只读的校验与扫描脚本（`tools/` 下全部）
 - 查询 Modrinth / CurseForge / GitHub 的公开 API 获取模组元数据
-- 修改 `index.toml`、`pack.toml` 的哈希（**必须**通过重新计算，不能手改）
+- 修改 `index.toml`、`pack.toml` 的哈希（**必须**通过重新计算或
+  运行 `packwiz refresh`，不能手改）
+- 维护 `bundled-mods.toml` 的来源登记
 - 在 `feature/*`、`fix/*`、`chore/*` 分支提交
 - 撰写 PR 描述、变更说明、模组调研结论
 - 更新 `CHANGELOG.md`、`docs/` 下的文档
@@ -85,13 +87,18 @@ python3 tools/scan_channels.py
 - **导出并发布 `.mrpack`** —— 发布动作由作者执行
 - **删除任何现有模组** —— 必须作者确认（可能是有意保留的）
 - **引入新模组** —— AI 可以调研并给出建议，但加入动作需作者确认
-- **修改 `AGENTS.md` 与 `tools/` 的判定规则** —— 属于约束本身，AI 不得自行放宽
+- **把模组改为打包分发**（即往 `mods/` 放 jar）—— 涉及许可证与仓库
+  体积，需作者确认
+- **修改 `AGENTS.md`、`bundled-mods.toml` 与 `tools/` 的判定规则**
+  —— 属于约束本身，AI 不得自行放宽
 
 ### 3.3 AI 绝对不能做
 
 - 放宽或绕过铁律判定
 - 手写 `index.toml` 的哈希而不实际计算
-- 直接把 `.jar` 提交进仓库（除 `overrides/` 下明确记录的例外，见 §5.3）
+- **把 jar 放进 `overrides/`** —— 会导出成 `overrides/overrides/`，
+  玩家装了不生效（已实测）。jar 一律放 `mods/`
+- 往 `mods/` 放 jar 却不登记 `bundled-mods.toml`
 - 声称已经测试过游戏内表现 —— **游戏内测试是作者的职责**
 - 在未实际运行的情况下声称"校验通过"
 
@@ -174,38 +181,94 @@ packwiz/
 ├── AGENTS.md              # 本文件：AI 与人的共同约束
 ├── README.md              # 面向使用者与贡献者的说明
 ├── CHANGELOG.md           # 版本变更记录
+├── bundled-mods.toml      # 打包分发模组的来源登记
 ├── pack.toml              # 整合包元数据（名称、版本、MC/Fabric 版本）
 ├── index.toml             # 文件索引（哈希清单，由 packwiz 生成）
-├── mods/                  # 每个模组一个 .pw.toml
-│   ├── sodium.pw.toml
-│   └── ...
+├── .packwizignore         # 排除开发文件，避免被当 overrides 分发
+├── mods/                  # 模组
+│   ├── sodium.pw.toml         # 走下载链接（Modrinth 来源）
+│   └── connectivity-*.jar     # 打包分发（非 Modrinth 来源）
 ├── resourcepacks/         # 资源包 .pw.toml
 ├── shaderpacks/           # 光影 .pw.toml
 ├── overrides/             # 覆盖文件（配置、默认选项等）
-│   └── ...
+│                          # 【注意】不要在这里放 jar
 ├── docs/                  # 开发文档
 │   ├── workflow.md        # 日常开发流程
-│   └── release.md         # 发版流程
+│   ├── release.md         # 发版流程
+│   ├── bundled-mods.md    # 打包分发模组的维护方法
+│   └── decisions/         # 架构决策记录
 ├── tools/                 # 校验脚本
 │   ├── verify_pack.py     # 哈希与索引一致性
 │   ├── scan_channels.py   # 铁律扫描（网络通道检测）
 │   ├── check_side.py      # side 字段合理性检查
+│   ├── check_bundled.py   # 打包分发模组的校验
 │   └── track_updates.py   # 上游更新追踪
 └── .github/workflows/
     └── validate.yml       # CI：每次 push / PR 自动校验
 ```
 
-### 5.3 例外：无法通过 Modrinth/CurseForge 分发的模组
+### 5.3 分发模型：manifest 链接 vs 打包 jar
 
-少数模组（作者定制构建、上游无公开分发）既不在 Modrinth 也不在 CurseForge。
-这类模组的处理方式：
+**这是本项目最容易搞错的地方，务必读完。**
 
-1. `.pw.toml` 使用 `url` 模式，URL 指向**本仓库的 GitHub Release**。
-2. 由作者把 jar 上传到对应 Release。
-3. `.pw.toml` 里保留一行注释标明"无上游分发渠道，需手动更新"。
+Modrinth 只接受来自 `cdn.modrinth.com` 的下载链接。因此首次发布到
+Modrinth 时，packwiz 会把**不能走链接的模组自动打包成 jar** 放进
+`overrides/mods/`。已用真实 packwiz 实测确认：
 
-**不允许**把这类 jar 直接提交进 git 仓库（会让仓库体积失控）。
-当前属于此类的模组记录在 `docs/manual-mods.md`。
+| 模组来源 | `mr export` 的行为 |
+|---|---|
+| Modrinth | 写进 manifest 的下载链接 |
+| CurseForge | **打包 jar** |
+| 非白名单域名（如 forgecdn.net） | **打包 jar** |
+| github.com / gitlab.com | 走链接（在 packwiz 白名单内） |
+| `mods/` 下的裸 jar | **打包 jar** |
+
+#### 操作规则
+
+**要打包分发的模组，jar 直接放在 `mods/` 下。**
+
+```bash
+# 正确
+mods/connectivity-fabric-26.3-7.7.jar     -> 导出为 overrides/mods/...  ✓
+
+# 错误！会变成 overrides/overrides/mods/...，玩家装了不生效
+overrides/mods/connectivity-fabric-26.3-7.7.jar                        ✗
+```
+
+这条已实测确认，**不要把 jar 放进 `overrides/`**。
+
+#### 为什么选"打包"而不是"链接"
+
+判断依据是**上游有没有可用的直链**，不是偏好：
+
+- CurseForge 模组：链接不被 Modrinth 接受，**只能打包**
+- 无公开 release 的 fork 构建：GitHub 上根本没有对应文件可链接，**只能打包**
+- 有公开 GitHub Release 的模组：可以走链接，但**一旦上游补发新版本仍需维护**
+
+#### 登记要求
+
+每个打包的模组都必须在 `bundled-mods.toml` 登记来源、许可证、更新方式。
+新增或更新 jar 后必须跑：
+
+```bash
+python3 tools/check_bundled.py
+```
+
+#### 许可证注意
+
+打包分发属于再分发行为。**ARR（保留所有权利）** 许可证的模组在打包前
+应确认已获作者授权。`check_bundled.py` 会对这类模组给出提示。
+当前包内 Connectivity 与 Cupboard 为 ARR。
+
+#### 仓库不该装的东西
+
+`mods/` 下的 jar 会进 git。这意味着**仓库体积会随打包模组增长**。
+目前 6 个 jar 约 27MB，其中 Modern UI 独占 24MB。新增打包模组时留意
+体积；若增长过快，考虑改用 Git LFS 或把 jar 挂到 Release 上。
+
+**不允许**把开发文件（`docs/`、`tools/`、`AGENTS.md`）混进索引 ——
+它们会被当 overrides 分发给玩家。`.packwizignore` 已排除，
+`verify_pack.py` 也会检查。
 
 ---
 
@@ -274,7 +337,8 @@ PR 描述必须包含：
 | `docs/workflow.md` | 日常开发：加模组、升级、修 bug 的完整步骤 |
 | `docs/release.md` | 发版：从版本号到 Modrinth 发布的完整流程 |
 | `docs/mc-upgrade.md` | MC 大版本升级的应对清单 |
-| `docs/manual-mods.md` | 无上游分发渠道的模组清单与更新方法 |
+| `docs/bundled-mods.md` | 打包分发模组的维护方法 |
+| `bundled-mods.toml` | 打包分发模组的来源登记 |
 | `docs/decisions/` | 架构决策记录（为什么选某个模组/方案） |
 
 ---

@@ -14,9 +14,29 @@
 
 ### 从 7.3 mrpack 导入的现状
 
-- 模组 108 个（102 个来自 Modrinth、2 个 CurseForge 独占、4 个无上游渠道）
+- 走下载链接的模组 112 个（全部来自 Modrinth，`cdn.modrinth.com`）
+- 打包分发的模组 6 个（CurseForge 2 个 + 无公开 release 的 fork 4 个）
 - 资源包 7 个、光影 3 个
-- `side` 字段：71 个 client、47 个 both
+
+### 分发模型说明
+
+Modrinth 只接受 `cdn.modrinth.com` 的下载链接，因此不在 Modrinth 上的
+模组必须打包成 jar 分发：
+
+| 模组 | 来源 | 许可证 | 打包原因 |
+|---|---|---|---|
+| Connectivity | CurseForge | ARR | CF 链接不被 Modrinth 接受 |
+| Cupboard | CurseForge | ARR | Connectivity 的前置 |
+| MasaGadget | GitHub fork | LGPL-3.0 | 26.3 构建无公开 release |
+| Modern UI (Unofficial Port) | GitHub | LGPL-3.0+ | 无 release 产物 |
+| Oh My Minecraft Client | GitHub fork | LGPL-3 | 0.7.1 构建未公开 |
+| Eating Animation Fork | GitHub fork | MIT | 包内 5.1.0 未公开发布 |
+
+jar 放在 `mods/` 下，由 packwiz 在 `mr export` 时自动打包进
+`overrides/`。来源登记见 `bundled-mods.toml`。
+
+**注意**：Connectivity 与 Cupboard 为 ARR（保留所有权利）许可证，
+打包分发在严格意义上属于再分发，宜确认已获作者授权。
 
 铁律扫描结果：**BLOCK 0**。3 个模组在 configuration 阶段注册通道，
 经人工核实为配置同步用途，需在游戏内验证原版客户端可正常加入（见下）。

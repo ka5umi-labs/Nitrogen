@@ -1,0 +1,81 @@
+# bundled-mods.toml —— 打包分发的模组清单
+#
+# 这些模组不能用下载链接（Modrinth 只接受 cdn.modrinth.com），
+# 因此 jar 直接放在 mods/ 下，由 packwiz 在 mr export 时自动
+# 打包进 overrides/mods/。
+#
+# 【重要】务必不要把 jar 放进 overrides/ 目录 —— packwiz 会把它
+# 导出成 overrides/overrides/mods/，玩家装了不生效。jar 必须放
+# mods/ 下。（已实测确认）
+#
+# 更新方式见 docs/bundled-mods.md。
+
+[[mod]]
+name = "Connectivity"
+file = "connectivity-fabric-26.3-7.7.jar"
+side = "both"
+license = "ARR"
+author = "Someaddon"
+source = "curseforge"
+source_id = 470193
+source_file_id = 9011123
+source_url = "https://www.curseforge.com/minecraft/mc-mods/connectivity/files/9011123"
+note = "优化网络连接与包处理的纯性能模组。已核实不注册自定义通道，仅 mixin 原版包做日志与包名美化（见 docs/decisions）。"
+update = "手动。CurseForge 页面下载新文件，替换 mods/ 下 jar 后跑 packwiz refresh"
+
+[[mod]]
+name = "Cupboard"
+file = "cupboard-fabric-26.3-4.2.jar"
+side = "both"
+license = "ARR"
+author = "Someaddon"
+source = "curseforge"
+source_id = 326652
+source_file_id = 8890593
+source_url = "https://www.curseforge.com/minecraft/mc-mods/cupboard/files/8890593"
+note = "Connectivity 的前置库。"
+update = "手动。跟随 Connectivity 更新"
+
+[[mod]]
+name = "MasaGadget"
+file = "MasaGadget-mc26.3-fabric-4.0.403-development.jar"
+side = "client"
+license = "LGPL-3.0"
+author = "plusls / Hendrix-Shen"
+source = "github-fork"
+source_url = "https://github.com/plusls/MasaGadget"
+note = "官方只发到 1.19.4 及以前；26.3 构建来自第三方 fork。上游无公开 release 可链接。"
+update = "手动。到 fork 仓库或作者群获取新构建"
+
+[[mod]]
+name = "Modern UI (Unofficial Port)"
+file = "ModernUI-Fabric-26.3-3.14.7-universal.jar"
+side = "client"
+license = "LGPL-3.0-or-later"
+author = "BloCamLimb / Huziyang520 (移植)"
+source = "github"
+source_url = "https://github.com/Huziyang520/ModernUI-Unofficial-Port"
+note = "官方 ModernUI 停留在 3.13.0；26.3 版是非官方移植。该仓库无 release 产物可链接。"
+update = "手动。到移植仓库获取新构建"
+
+[[mod]]
+name = "Oh My Minecraft Client"
+file = "Oh-My-Minecraft-Client-v0.7.1-mc26.3-fabric.jar"
+side = "client"
+license = "LGPL-3"
+author = "plusls"
+source = "github-fork"
+source_url = "https://github.com/plusls/oh-my-minecraft-client"
+note = "官方最新 release 是 2022 年的 0.5；0.7.1 的 26.3 构建未公开发布。"
+update = "手动。到 fork 仓库或作者群获取新构建"
+
+[[mod]]
+name = "Eating Animation Fork"
+file = "eating-animation-fork-26.3+5.1.0.jar"
+side = "client"
+license = "MIT"
+author = "theone_ss / Fring-BS"
+source = "github-fork"
+source_url = "https://github.com/Fring-BS/Eating-Animation-Fork"
+note = "上游公开发布的是 5.0.0（可链接）；包内 5.1.0 版本未公开发布。若上游补发 5.1.0 可改回 url 模式。"
+update = "手动。到 fork 仓库获取新构建"

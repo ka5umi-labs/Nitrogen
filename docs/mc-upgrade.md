@@ -53,7 +53,13 @@ python3 tools/track_updates.py --mc <新版本>
 python3 tools/verify_pack.py --online
 python3 tools/scan_channels.py
 python3 tools/check_side.py
+python3 tools/check_bundled.py
 ```
+
+**打包分发的模组不会被自动升级。** 每次 MC 大版本升级时，这些模组
+（`mods/` 下的 jar）都需要单独找支持新版本的构建 —— 见
+[bundled-mods.md](bundled-mods.md)。它们通常是升级路上的主要阻塞项，
+因为上游往往没有公开 release。
 
 然后交给作者做游戏内测试。
 

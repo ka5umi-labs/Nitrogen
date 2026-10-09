@@ -1,8 +1,0 @@
-name = "Eating Animation Fork"
-filename = "eating-animation-fork-26.3+5.1.0.jar"
-side = "client"
-
-[download]
-url = "https://github.com/ka5umi-labs/Nitrogen/releases/download/v7.3/eating-animation-fork-26.3%2B5.1.0.jar"
-hash-format = "sha512"
-hash = "9a4742030638e97beae4a676491bcbe72a1dc5dac972015c741c4a9d669074eb0a074c6abe0e2d7ea8a8dc948eb3ff27a8af6ae6d84dcda9ef48674b80e8ae48"

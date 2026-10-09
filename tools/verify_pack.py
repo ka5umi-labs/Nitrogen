@@ -5,9 +5,13 @@ verify_pack.py —— packwiz 仓库一致性校验
 检查项：
   1. 每个 .pw.toml 都能被解析，必填字段齐全
   2. index.toml 中每个条目的哈希与磁盘实际文件一致
-  3. index.toml 覆盖了所有 .pw.toml，且没有多余条目
+  3. index.toml 覆盖了所有 .pw.toml 与打包的 jar，且没有多余条目
   4. pack.toml 里记录的 index.toml 哈希正确
-  5. 远程下载地址可达（--online 时启用）
+  5. 仓库自身文件（docs/、tools/ 等）没有混进 index.toml
+     —— 它们会被当 overrides 分发给玩家
+  6. 远程下载地址可达（--online 时启用）
+
+打包分发的模组（mods/ 下的裸 jar）由 tools/check_bundled.py 单独校验。
 
 退出码：0 全部通过；1 存在错误。
 用法：
@@ -29,6 +33,14 @@ ALLOWED_KEYS = {
     "name", "filename", "side", "pin", "download", "update", "option",
 }
 REQUIRED_KEYS = {"name", "filename", "download"}
+
+# 这些文件/目录属于开发用途，绝不能被索引
+# （否则 mr export 会把它们当 overrides 打包给玩家）
+FORBIDDEN_IN_INDEX = (
+    "AGENTS.md", "README.md", "CHANGELOG.md", "LICENSE",
+    "docs/", "tools/", ".github/", "bundled-mods.toml",
+    ".packwizignore", ".gitignore",
+)
 
 errors = []
 warnings = []
@@ -174,6 +186,13 @@ def check_index():
     if not entries:
         err("index.toml 中没有任何 [[files]] 条目")
 
+    # 开发用文件绝不能出现在索引里 —— 它们会被当 overrides 打包给玩家
+    for rel in entries:
+        if rel.startswith(FORBIDDEN_IN_INDEX) or "__pycache__" in rel:
+            err(f"{rel}: 开发用文件出现在 index.toml 中，"
+                f"会被当 overrides 分发给玩家。"
+                f"请检查 .packwizignore 是否遗漏该模式")
+
     for rel, declared in entries.items():
         full = os.path.join(ROOT, rel)
         if not os.path.isfile(full):
@@ -184,15 +203,20 @@ def check_index():
             err(f"{rel}: index.toml 哈希不匹配（应执行 packwiz refresh）\n"
                 f"      声明 {declared}\n      实际 {actual}")
 
-    # index 与磁盘对照
+    # index 与磁盘对照（含打包分发的 jar）
     on_disk = set(collect_pw_tomls())
+    mods_dir = os.path.join(ROOT, "mods")
+    if os.path.isdir(mods_dir):
+        for f in os.listdir(mods_dir):
+            if f.endswith((".jar", ".litemod")):
+                on_disk.add(f"mods/{f}")
     in_index = set(entries)
     for rel in sorted(on_disk - in_index):
         err(f"{rel}: 存在于磁盘但不在 index.toml 中（应执行 packwiz refresh）")
     for rel in sorted(in_index - on_disk):
         err(f"{rel}: 在 index.toml 中但磁盘上不存在")
 
-    # metafile 标记
+    # metafile 标记：.pw.toml 必须有，jar 必须没有
     for m in re.finditer(
         r'\[\[files\]\]\s*\nfile = "((?:[^"\\]|\\.)*)"\s*\nhash = "[0-9a-f]+"\s*\n(metafile = true)?',
         raw,
@@ -200,6 +224,9 @@ def check_index():
         rel, mf = m.group(1), m.group(2)
         if rel.endswith(".pw.toml") and not mf:
             err(f"{rel}: 是元数据文件但 index.toml 中缺少 metafile = true")
+        if rel.endswith((".jar", ".litemod")) and mf:
+            err(f"{rel}: 是打包的 jar 但被标记为 metafile，"
+                f"导出时不会被打包进 overrides")
 
     return idx_path, entries
 

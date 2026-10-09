@@ -19,16 +19,21 @@ Modrinth: https://modrinth.com/modpack/nitrogen7
 ```
 pack.toml           整合包元数据（版本、MC/Fabric 版本）
 index.toml          文件索引（哈希清单，由 packwiz 生成）
-mods/               模组元数据（每个模组一个 .pw.toml，不含 jar）
+mods/               模组：Modrinth 来源为 .pw.toml，非 Modrinth 来源为 jar
 resourcepacks/      资源包元数据
 shaderpacks/        光影元数据
 overrides/          分发给玩家的覆盖文件（配置等）
+bundled-mods.toml   打包分发模组的来源登记
 tools/              校验脚本
 docs/               开发文档
 ```
 
-**注意**：本仓库用 packwiz 管理，`mods/` 下只有 `.pw.toml` 元数据文件，
-实际的 `.jar` 由 packwiz 在安装时按元数据下载。**不要把 jar 提交进仓库。**
+**分发模型**：Modrinth 只接受 `cdn.modrinth.com` 的下载链接，因此
+不在 Modrinth 上的模组（CurseForge、无公开 release 的 fork 构建）
+必须把 jar 直接放在 `mods/` 下，packwiz 会在 `mr export` 时自动打包进
+`overrides/`。**不要把 jar 放进 `overrides/`** —— 会导出成
+`overrides/overrides/`，玩家装了不生效。详见
+[docs/bundled-mods.md](docs/bundled-mods.md)。
 
 ## 使用（玩家）
 
@@ -77,7 +82,7 @@ python3 tools/track_updates.py
 | [docs/workflow.md](docs/workflow.md) | 日常开发流程 |
 | [docs/release.md](docs/release.md) | 发版流程 |
 | [docs/mc-upgrade.md](docs/mc-upgrade.md) | MC 大版本升级清单 |
-| [docs/manual-mods.md](docs/manual-mods.md) | 无上游渠道的模组处理 |
+| [docs/bundled-mods.md](docs/bundled-mods.md) | 打包分发模组的维护 |
 
 ## 校验脚本
 
@@ -86,9 +91,10 @@ python3 tools/track_updates.py
 | `tools/verify_pack.py` | 哈希/索引一致性 + 下载可达性 |
 | `tools/scan_channels.py` | **铁律扫描**：检测网络通道注册与握手插件 |
 | `tools/check_side.py` | 复核 `side` 字段与上游 `environment` 是否一致 |
+| `tools/check_bundled.py` | 打包分发模组的登记、布局与许可证检查 |
 | `tools/track_updates.py` | 上游更新追踪，找出未跟进新 MC 版本的模组 |
 
-CI 会在每次 push 与 PR 时自动运行前三个。
+CI 会在每次 push 与 PR 时自动运行前四个。
 
 ## 贡献
 
