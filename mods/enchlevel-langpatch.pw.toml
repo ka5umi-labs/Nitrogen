@@ -1,0 +1,13 @@
+name = "Enchantment Level Language Patch"
+filename = "enchlevel-langpatch-3.10.3.jar"
+side = "client"
+
+[download]
+url = "https://cdn.modrinth.com/data/Lf4kDKU9/versions/Er9fjTFg/enchlevel-langpatch-3.10.3.jar"
+hash-format = "sha512"
+hash = "5ced5eb1d29548de745e79ac4488e678a505bab68e0c6f5398c7637b2a0ccfd25d45c1d1918d72b37dce6b4fe2889a01c6340488fe56e5c7336a856fcfbfd5e4"
+
+[update]
+[update.modrinth]
+mod-id = "Lf4kDKU9"
+version = "Er9fjTFg"

@@ -1,0 +1,13 @@
+name = "Faithful 64x"
+filename = "Faithful 64x - Release 15.zip"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/r4GILswZ/versions/6QfM0mZq/Faithful%2064x%20-%20Release%2015.zip"
+hash-format = "sha512"
+hash = "bc534dfb0e71586cb49a18533b29940d0224e03aba52dd65b29127477447e95adfbceb7ccf25468ecb65db05bff0cd1bed45a4708042579cd2fc4a9ae01f9fd8"
+
+[update]
+[update.modrinth]
+mod-id = "r4GILswZ"
+version = "6QfM0mZq"

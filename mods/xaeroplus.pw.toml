@@ -1,0 +1,13 @@
+name = "XaeroPlus"
+filename = "XaeroPlus-2.36.6+fabric-26.3-WM1.47.0-MM26.6.0.jar"
+side = "client"
+
+[download]
+url = "https://cdn.modrinth.com/data/EnPUzSTg/versions/cxkFv564/XaeroPlus-2.36.6%2Bfabric-26.3-WM1.47.0-MM26.6.0.jar"
+hash-format = "sha512"
+hash = "3cd072a6ac1b21af86e2d3b175c7651d43591cf8d0ca8c0003869efed2a1a8bf790019b5eff30ca97f980d7f69155f67906ec7c17b904c01f51b957199fb1460"
+
+[update]
+[update.modrinth]
+mod-id = "EnPUzSTg"
+version = "cxkFv564"

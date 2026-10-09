@@ -1,0 +1,111 @@
+name: validate
+
+# 每次推送与 PR 都运行静态校验。
+# 特别地，任何改动 mods/ 的 PR 都必须通过铁律扫描。
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  # ---------- 1. 基础校验：哈希一致性 + 元数据完整性 ----------
+  verify:
+    name: packwiz 一致性
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 校验 index.toml / pack.toml 与磁盘一致
+        run: python3 tools/verify_pack.py
+
+      - name: 校验下载地址可达
+        run: python3 tools/verify_pack.py --online
+
+  # ---------- 2. 铁律：网络通道扫描 ----------
+  channel-scan:
+    name: 原版直连铁律扫描
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 缓存已下载的模组 jar
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/nitrogen-tools/jars
+          key: jars-${{ hashFiles('mods/*.pw.toml', 'resourcepacks/*.pw.toml', 'shaderpacks/*.pw.toml') }}
+          restore-keys: jars-
+
+      - name: 扫描全部模组
+        run: python3 tools/scan_channels.py --json scan-result.json
+
+      - name: 上传扫描结果
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: channel-scan
+          path: scan-result.json
+          if-no-files-found: ignore
+
+  # ---------- 3. side 字段复核 ----------
+  side-check:
+    name: side 字段复核
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 复核 side 与上游 environment 是否一致
+        run: python3 tools/check_side.py
+
+  # ---------- 4. 更新追踪（仅提示，不阻塞） ----------
+  track-updates:
+    name: 上游更新追踪
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 汇总上游更新情况
+        run: |
+          python3 tools/track_updates.py --json updates.json | tee updates.txt
+
+      - name: 把汇总写入 Job Summary
+        if: always()
+        run: |
+          {
+            echo '## 上游更新追踪'
+            echo ''
+            echo '```'
+            cat updates.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: 上传追踪结果
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: update-tracking
+          path: |
+            updates.json
+            updates.txt
+          if-no-files-found: ignore

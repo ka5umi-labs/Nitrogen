@@ -1,0 +1,13 @@
+name = "Nitrogen"
+author = "tlwsy"
+version = "7.3"
+pack-format = "packwiz:1.1.0"
+
+[index]
+file = "index.toml"
+hash-format = "sha256"
+hash = "797b27d5e7098dc8f4ea1f6840c037fb93caf884df498d4c358d47117d7001a3"
+
+[versions]
+fabric = "0.19.5"
+minecraft = "26.3"

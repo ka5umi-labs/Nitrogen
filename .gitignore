@@ -1,0 +1,28 @@
+# packwiz 可执行文件（放在仓库根目录方便使用，但不入库）
+packwiz
+packwiz.exe
+packwiz-*
+
+# 导出的整合包
+*.mrpack
+*.zip
+
+# 临时与缓存
+/tools/__pycache__/
+__pycache__/
+*.pyc
+.cache/
+*.json.out
+scan.json
+updates.json
+
+# 编辑器
+.vscode/
+.idea/
+*.swp
+*~
+
+# 操作系统
+.DS_Store
+Thumbs.db
+desktop.ini

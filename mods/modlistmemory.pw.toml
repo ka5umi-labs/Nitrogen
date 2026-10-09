@@ -1,0 +1,13 @@
+name = "ModListMemory"
+filename = "modlistmemory-fabric-1.104.0-beta.1+26.3-rc-2.jar"
+side = "client"
+
+[download]
+url = "https://cdn.modrinth.com/data/qap5C41G/versions/SpWsGws5/modlistmemory-fabric-1.104.0-beta.1%2B26.3-rc-2.jar"
+hash-format = "sha512"
+hash = "e968318d71a6c08d1987beb6417010f58d4e87dcdadd95d1eb5ac6c2a68fc3c844a09d6cbca4be73c584311cdb97840590a7e739fda994d70f0852b713daaef8"
+
+[update]
+[update.modrinth]
+mod-id = "qap5C41G"
+version = "SpWsGws5"

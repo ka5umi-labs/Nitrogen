@@ -1,0 +1,13 @@
+name = "clientcommands"
+filename = "clientcommands-2.16.2.jar"
+side = "client"
+
+[download]
+url = "https://cdn.modrinth.com/data/7Coz83fv/versions/HXUpxTML/clientcommands-2.16.2.jar"
+hash-format = "sha512"
+hash = "edd22eba0f739d59f0b60c940ba37a44b173b39e5969b05268715993d75f3d7fbb49128f51867f9dff287c8a849464ac3f05ac7b940b0da32dcd1dec1bd17e57"
+
+[update]
+[update.modrinth]
+mod-id = "7Coz83fv"
+version = "HXUpxTML"

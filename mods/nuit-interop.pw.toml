@@ -1,0 +1,13 @@
+name = "Nuit Interop"
+filename = "nuit-interop-fabric-1.0.0-beta.5+mc26.3.jar"
+side = "client"
+
+[download]
+url = "https://cdn.modrinth.com/data/HpdHOPOp/versions/W4OrxzLu/nuit-interop-fabric-1.0.0-beta.5%2Bmc26.3.jar"
+hash-format = "sha512"
+hash = "56cc7eaf6b3ed70c8f5590bac4f7a8883ed5ab9316f45e5191fc9c8e5713a1c68bed42d46a6844478cfab7f68705cf102d3a484f4e0b1f6453df73343bbf08b3"
+
+[update]
+[update.modrinth]
+mod-id = "HpdHOPOp"
+version = "W4OrxzLu"

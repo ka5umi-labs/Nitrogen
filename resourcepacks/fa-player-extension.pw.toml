@@ -1,0 +1,13 @@
+name = "Fresh Animations: Player Extension"
+filename = "FA+Player-v1.1.zip"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/TAIMVZCL/versions/Wj7NeGjP/FA%2BPlayer-v1.1.zip"
+hash-format = "sha512"
+hash = "d2a5c46ae53e4bb6355604a1ade253ab49f1deb205f5ee69085014965241d3c9623204951ab174a5dbdaf24d9b25ecae9a1638cc6a13d780b398a6d70d157a4e"
+
+[update]
+[update.modrinth]
+mod-id = "TAIMVZCL"
+version = "Wj7NeGjP"

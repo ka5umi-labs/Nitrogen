@@ -1,0 +1,13 @@
+name = "Armor Hud"
+filename = "armor_hud-fabric-3.5.0+26.3.jar"
+side = "client"
+
+[download]
+url = "https://cdn.modrinth.com/data/AghHBZC5/versions/cUWOVx5R/armor_hud-fabric-3.5.0%2B26.3.jar"
+hash-format = "sha512"
+hash = "b984768fa9772ebe21f3ee91d51593de95b9f63ea649c57117b96e74ae13cde6fd714cbea780c5d70bb60121a82c1e2a21998c5e9fa5f9aa902d3eb4a0ad8a95"
+
+[update]
+[update.modrinth]
+mod-id = "AghHBZC5"
+version = "cUWOVx5R"

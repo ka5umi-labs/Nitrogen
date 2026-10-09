@@ -1,0 +1,8 @@
+name = "Modern UI (Unofficial Port)"
+filename = "ModernUI-Fabric-26.3-3.14.7-universal.jar"
+side = "client"
+
+[download]
+url = "https://github.com/ka5umi-labs/Nitrogen/releases/download/v7.3/ModernUI-Fabric-26.3-3.14.7-universal.jar"
+hash-format = "sha512"
+hash = "f61afdbff6c681ec737d5bf2a646018e9795dd7f769da672adaff069549440cf124daff2dd5d5e09b30ecebd4b69c3e6216ed7d37d5a0cbb534d8ed753681b54"

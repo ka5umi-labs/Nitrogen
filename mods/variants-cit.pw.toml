@@ -1,0 +1,13 @@
+name = "Variants-CIT"
+filename = "variants-cit-5.7.0+26.3.jar"
+side = "client"
+
+[download]
+url = "https://cdn.modrinth.com/data/jURjbCaq/versions/ZIvWBpId/variants-cit-5.7.0%2B26.3.jar"
+hash-format = "sha512"
+hash = "a28c4c51ddfd1707c2f3240bd825089e9a7789880284bd94fcf10fa966a44d523b101f6b0f10e07e448193589d11b5e51a3b2c3a261b65ba96ec275a549a3ada"
+
+[update]
+[update.modrinth]
+mod-id = "jURjbCaq"
+version = "ZIvWBpId"

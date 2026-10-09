@@ -1,0 +1,13 @@
+name = "Eclipse's Tweakeroo Additions"
+filename = "eclipsestweakeroo-0.7.7-26.3.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/6kKLK5i1/versions/8GK9QYiO/eclipsestweakeroo-0.7.7-26.3.jar"
+hash-format = "sha512"
+hash = "470592099db8608c8f2c94b283b7b5320cc260004213ed29b25906fc3c30c45af2031dcc5726fe23ba47ca204caf5fbc9f11dc6d4e9701e7781e3a0f944fdc53"
+
+[update]
+[update.modrinth]
+mod-id = "6kKLK5i1"
+version = "8GK9QYiO"

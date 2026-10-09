@@ -1,0 +1,13 @@
+name = "AttributeFix"
+filename = "AttributeFix-fabric-MC26.3-26.3.0.1.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/lOOpEntO/versions/zJLURVLx/AttributeFix-fabric-MC26.3-26.3.0.1.jar"
+hash-format = "sha512"
+hash = "06658aee4c9943738663cb465ab0e68737c971d8544c2fd3e84aedb6a64a5f17949498492cafdacc9ba70185bae4e68d4825a390473c06eb8a3ed06bd983b202"
+
+[update]
+[update.modrinth]
+mod-id = "lOOpEntO"
+version = "zJLURVLx"
