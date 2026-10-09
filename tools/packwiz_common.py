@@ -148,15 +148,65 @@ def read_fabric_json(jar_path):
         return None
 
 
-def git_changed_meta(base="origin/main"):
-    """返回本次改动涉及的 .pw.toml 列表；git 不可用时返回 None。"""
-    for rev in (f"{base}...HEAD", "HEAD~1"):
-        try:
-            r = subprocess.run(
-                ["git", "diff", "--name-only", rev],
-                cwd=ROOT, capture_output=True, text=True, check=True,
-            )
-        except Exception:
-            continue
-        return [l for l in r.stdout.splitlines() if l.endswith(".pw.toml")]
+def git_changed_meta(base=None):
+    """返回本次改动涉及的 .pw.toml 列表；git 不可用时返回 None。
+
+    按以下顺序尝试，任一成功即返回（取并集会更准确，但这里以最贴近
+    当前上下文的结果为准）：
+
+      1. 工作区 + 暂存区未提交的改动（本地开发、CI 的 pull_request）
+      2. 相对 base（默认 origin/main）的已提交改动（CI 的 push 事件）
+      3. HEAD~1（本地刚提交完）
+
+    注意：在 PR 场景下改动往往尚未提交到任何分支外，此时 1 是唯一
+    能命中的来源，因此它必须排在最前。
+    """
+    env_base = os.environ.get("GITHUB_BASE_REF")
+
+    # 1. 未提交改动（工作区 + 暂存区）
+    for args in (["diff", "--name-only", "HEAD"],
+                 ["diff", "--name-only", "--cached"],
+                 ["diff", "--name-only"]):
+        r = _try_git(args)
+        if r:
+            return r
+
+    # 2. 相对 base 的已提交改动
+    bases = []
+    if base:
+        bases.append(base)
+    if env_base:
+        bases.append(f"origin/{env_base}")
+    bases += ["origin/main", "origin/master"]
+    for b in bases:
+        if _rev_exists(b):
+            r = _try_git(["diff", "--name-only", f"{b}...HEAD"])
+            if r:
+                return r
+
+    # 3. 上一个提交
+    r = _try_git(["diff", "--name-only", "HEAD~1"])
+    if r:
+        return r
+
     return None
+
+
+def _try_git(args):
+    """执行 git 命令，返回 .pw.toml 文件列表；无输出或失败返回 None。"""
+    try:
+        r = subprocess.run(["git"] + args, cwd=ROOT,
+                           capture_output=True, text=True, check=True)
+    except Exception:
+        return None
+    files = [l for l in r.stdout.splitlines() if l.endswith(".pw.toml")]
+    return files or None
+
+
+def _rev_exists(rev):
+    try:
+        subprocess.run(["git", "rev-parse", "--verify", rev],
+                       cwd=ROOT, capture_output=True, check=True)
+        return True
+    except Exception:
+        return False
